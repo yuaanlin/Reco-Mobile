@@ -26,6 +26,7 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": "Reco is a cross-platform Calendar Application Project made by Yuanlin Lin. This mobile version is using React Navtive with Expo framwork to build."
+    "description": "Reco is a cross-platform Calendar Application Project made by Yuanlin Lin. This mobile version is using React Navtive with Expo framwork to build.",
+    "githubUrl": "https://github.com/ken20001207/reco-mobile"
   }
 }

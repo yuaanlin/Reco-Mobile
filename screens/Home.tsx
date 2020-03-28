@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Todos from "./HomeTabs/Todos";
-import Events from "./HomeTabs/Events";
+import Event from "./HomeTabs/Event";
 
 export default class Home extends React.Component {
     render() {
@@ -26,7 +26,7 @@ export default class Home extends React.Component {
                 }}
             >
                 <Tab.Screen name="Todos" component={Todos} />
-                <Tab.Screen name="Events" component={Events} />
+                <Tab.Screen name="Events" component={Event} />
             </Tab.Navigator>
         );
     }

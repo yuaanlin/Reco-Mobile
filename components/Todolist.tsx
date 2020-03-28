@@ -14,12 +14,13 @@ export default class Todolist extends React.Component<TodolistProps> {
                     end={[1, 1]}
                     style={{
                         borderRadius: 4,
-                        padding: 8,
                         marginBottom: 16,
-                        width: this.props.calendar.title.length * 22
+                        width: this.props.calendar.title.length * 24
                     }}
                 >
-                    <Text style={{ fontWeight: "bold", color: "white", fontSize: 16 }}>{this.props.calendar.title}</Text>
+                    <View style={{padding: 8, marginStart: 8, backgroundColor: "rgba(0,0,0,0.3)"}}>
+                        <Text style={{ fontWeight: "bold", color: "white", fontSize: 16 }}>{this.props.calendar.title}</Text>
+                    </View>
                 </LinearGradient>
                 {this.props.calendar.todos.map(todo => {
                     if (!todo.complete) return <TodoCard key={todo.id} todo={todo} />;

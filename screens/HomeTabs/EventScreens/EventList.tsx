@@ -1,22 +1,24 @@
 import React from "react";
 import { Text, View, Animated, Dimensions, PanResponder, Easing } from "react-native";
 import { Grid } from "react-native-easy-grid";
-import { EventsScreenProps, EventsScreenStates } from "./types";
-import RecoEvent from "../../classes/RecoEvent";
-import eventsToDispay from "../../utils/eventsToday";
+import { EventListScreenProps, EventListScreenStates } from "../types";
+import RecoEvent from "../../../classes/RecoEvent";
+import eventsToDispay from "../../../utils/eventsToday";
 import LinearGradient from "expo-linear-gradient/build/LinearGradient";
-import store from "../../redux/store";
-import { setSelectedDate } from "../../redux/selectedDay/actions";
+import store from "../../../redux/store";
+import { setSelectedDate } from "../../../redux/selectedDay/actions";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { setSelectedEvent } from "../../../redux/selectedEvent/actions";
 
 Date.prototype.addDays = function(days) {
     this.setDate(this.getDate() + days);
     return this;
 };
 
-export default class Events extends React.Component<EventsScreenProps, EventsScreenStates> {
+export default class EventList extends React.Component<EventListScreenProps, EventListScreenStates> {
     _panResponder: any;
     screenWidth = Math.round(Dimensions.get("window").width);
-    constructor(props: Readonly<EventsScreenProps>) {
+    constructor(props: Readonly<EventListScreenProps>) {
         super(props);
         const panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => false,
@@ -56,6 +58,17 @@ export default class Events extends React.Component<EventsScreenProps, EventsScr
             eventToDisplay: eventsToDispay(store.getState().userState.calendars, store.getState().selectedDay),
             ScrollViewLeft: new Animated.Value(0)
         };
+        this.openEventInfo = this.openEventInfo.bind(this);
+    }
+
+    openEventInfo(event: RecoEvent) {
+        store.dispatch(setSelectedEvent(event));
+        this.props.navigation.navigate("Home", {
+            screen: "Events",
+            params: {
+                screen: "EventInfo"
+            }
+        });
     }
 
     render() {
@@ -101,7 +114,7 @@ export default class Events extends React.Component<EventsScreenProps, EventsScr
                             <Animated.View style={{ width: "100%", paddingTop: 60, paddingBottom: 60 }}>
                                 <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}></Text>
                                 {this.state.eventToDisplay.map(recoEvent => {
-                                    return <EventCard event={recoEvent} key={recoEvent.id} />;
+                                    return <EventCard openEventInfo={this.openEventInfo} event={recoEvent} key={recoEvent.id} />;
                                 })}
                             </Animated.View>
                         </Grid>
@@ -114,6 +127,7 @@ export default class Events extends React.Component<EventsScreenProps, EventsScr
 
 interface EventCardProps {
     event: RecoEvent;
+    openEventInfo(event: RecoEvent): void;
 }
 
 class EventCard extends React.Component<EventCardProps> {
@@ -135,27 +149,31 @@ class EventCard extends React.Component<EventCardProps> {
                     margin: 16
                 }}
             >
-                <LinearGradient
-                    colors={this.props.event.color}
-                    start={[0, 0]}
-                    end={[1, 1]}
-                    style={{
-                        width: "100%",
-                        borderRadius: 10,
-                        opacity: this.props.event.ignore ? 0.2 : 1
-                    }}
-                >
-                    <View style={{ backgroundColor: "rgba(0,0,0,0.8)", marginStart: 6, padding: 18 }}>
-                        <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, fontWeight: "bold" }}>
-                            {evnet.getDurationString()}
-                        </Text>
-                        <Text style={{ color: "rgba(255,255,255,1)", fontSize: 18, marginTop: 6, fontWeight: "bold" }}>{evnet.title}</Text>
-                        <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, marginTop: 6, fontWeight: "bold" }}>
-                            {evnet.calendarTitle}
-                        </Text>
-                        {evnet.ignore ? IgnoreText : null}
-                    </View>
-                </LinearGradient>
+                <TouchableOpacity onPress={() => this.props.openEventInfo(this.props.event)}>
+                    <LinearGradient
+                        colors={this.props.event.color}
+                        start={[0, 0]}
+                        end={[1, 1]}
+                        style={{
+                            width: "100%",
+                            borderRadius: 10,
+                            opacity: this.props.event.ignore ? 0.2 : 1
+                        }}
+                    >
+                        <View style={{ backgroundColor: "rgba(0,0,0,0.8)", marginStart: 6, padding: 18 }}>
+                            <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, fontWeight: "bold" }}>
+                                {evnet.getDurationString()}
+                            </Text>
+                            <Text style={{ color: "rgba(255,255,255,1)", fontSize: 18, marginTop: 6, fontWeight: "bold" }}>
+                                {evnet.title}
+                            </Text>
+                            <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, marginTop: 6, fontWeight: "bold" }}>
+                                {evnet.calendarTitle}
+                            </Text>
+                            {evnet.ignore ? IgnoreText : null}
+                        </View>
+                    </LinearGradient>
+                </TouchableOpacity>
             </View>
         );
     }

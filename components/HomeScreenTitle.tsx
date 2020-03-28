@@ -9,6 +9,6 @@ export default class HomeScreenTitle extends React.Component {
         store.subscribe(this.forceUpdate.bind(this));
     }
     render() {
-        return <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>{getDayDescription(store.getState().selectedDay)}</Text>;
+        return <Text style={{ color: "white", fontWeight: "bold", fontSize: 14 }}>{getDayDescription(store.getState().selectedDay)}</Text>;
     }
 }

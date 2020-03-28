@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 
 import store from "./redux/store";
 import RecoUser from "./classes/RecoUser";
-import { Alert } from "react-native";
+import { Alert, StatusBar } from "react-native";
 import { setUserData } from "./redux/user/actions";
 import HomeScreenTitle from "./components/HomeScreenTitle";
 
@@ -32,6 +32,7 @@ export default class App extends React.Component {
     render() {
         return (
             <AppearanceProvider>
+                <StatusBar barStyle="light-content" />
                 <NavigationContainer theme={DarkTheme}>
                     <Stack.Navigator>
                         <Stack.Screen
@@ -40,7 +41,8 @@ export default class App extends React.Component {
                             options={{
                                 headerTitle: () => <HomeScreenTitle />,
                                 headerStyle: {
-                                    backgroundColor: "black"
+                                    backgroundColor: "black",
+                                    height: 72
                                 }
                             }}
                         />
